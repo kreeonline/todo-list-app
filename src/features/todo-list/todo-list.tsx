@@ -8,15 +8,14 @@ import { cn } from '@/lib/utils';
 export const TodoList = ({ className, ...props }: ComponentProps<'div'>) => {
   const {
     deleteTodoState: [_deleteTodoState, setDeleteTodoState],
-    todoQuery: { data: todos, isLoading, isFetching },
+    todoQuery: { data: todos, isFetching },
     updateTodoMutation: { mutate: updateTodoItem, isPending: isUpdating },
     deleteTodoMutation: { isPending: isDeleting },
   } = useTodoListContext();
 
-  if ((isLoading || isFetching) && !todos?.length) return <TodoLoading />;
+  if (isFetching && !todos?.length) return <TodoLoading />;
 
-  if (!isLoading && !isFetching && (!todos || todos.length === 0))
-    return <TodoListEmpty />;
+  if (!isFetching && (!todos || todos.length === 0)) return <TodoListEmpty />;
 
   return (
     <div className={cn('my-4 flex flex-col gap-2', className)} {...props}>

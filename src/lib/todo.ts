@@ -1,5 +1,10 @@
 import z from 'zod';
-import type { Todo } from '@/features/todo-list/todo.type';
+
+export type Todo = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
 
 export const titleMinLength = 3;
 

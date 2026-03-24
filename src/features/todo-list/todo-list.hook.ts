@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useDebounceValue } from 'usehooks-ts';
 import {
   addTodo,
   addTodoFormSchema,
@@ -18,9 +19,17 @@ export const useTodoList = () => {
   const deleteTodoState = useState<Todo | null>(null);
   const [_deleteTodo, setDeleteTodo] = deleteTodoState;
 
+  const form = useForm<AddTodoFormSchema>({
+    resolver: zodResolver(addTodoFormSchema),
+    defaultValues: defaultAddTodoFormValues,
+  });
+
+  const searchTodos = useWatch({ control: form.control, name: 'title' });
+  const [debounceSearchTodos] = useDebounceValue(searchTodos, 300);
+
   const todoQuery = useQuery<Todo[]>({
-    queryKey: todoQueryKeys.all,
-    queryFn: async () => getTodoList(),
+    queryKey: todoQueryKeys.search(debounceSearchTodos),
+    queryFn: async () => getTodoList({ title: debounceSearchTodos }),
     meta: {
       errorMessage: 'Unable to fetch todo list',
     },
@@ -53,11 +62,6 @@ export const useTodoList = () => {
       errorMessage: `Unable to delete todo`,
       invalidates: [todoQueryKeys.all],
     },
-  });
-
-  const form = useForm<AddTodoFormSchema>({
-    resolver: zodResolver(addTodoFormSchema),
-    defaultValues: defaultAddTodoFormValues,
   });
 
   const onSubmit = (value: AddTodoFormSchema) => {

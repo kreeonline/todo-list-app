@@ -1,5 +1,5 @@
 import { Controller } from 'react-hook-form';
-import { Plus } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { Field, FieldError } from '@/components/ui/field';
 import {
   InputGroup,
@@ -35,6 +35,19 @@ export const AddTodoInput = () => {
                 />
                 <InputGroupAddon align="inline-end">
                   {isAdding && <Spinner />}
+
+                  {field.value && (
+                    <InputGroupButton
+                      type="button"
+                      aria-label="Add new todo"
+                      title="Add new todo"
+                      size="icon-xs"
+                      disabled={isAdding || disabled}
+                      onClick={() => form.reset({ title: '' })}
+                    >
+                      <X />
+                    </InputGroupButton>
+                  )}
 
                   <InputGroupButton
                     type="submit"

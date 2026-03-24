@@ -24,7 +24,7 @@ export const defaultAddTodoFormValues: AddTodoFormSchema = {
 
 export const todoQueryKeys = {
   all: ['todos'] as const,
-  detail: (id: Todo['id']) => [...todoQueryKeys.all, id] as const,
+  search: (title: Todo['title']) => [...todoQueryKeys.all, title] as const,
 };
 
 export const getTodoList = async (
@@ -33,7 +33,7 @@ export const getTodoList = async (
   const url = new URL('http://localhost:3000/todos');
 
   if (params?.title) {
-    url.searchParams.append('title:contains', params.title);
+    url.searchParams.append('title_like', params.title);
   }
 
   if (params?.completed !== undefined) {

@@ -16,12 +16,14 @@ export const TodoListEmpty = (props: ComponentProps<typeof Empty>) => {
         <EmptyMedia variant="icon">
           <ListX />
         </EmptyMedia>
-        <EmptyTitle>No Todos</EmptyTitle>
-        <EmptyDescription>No todos data found.</EmptyDescription>
+        <EmptyTitle>No Data Found</EmptyTitle>
+        <EmptyDescription>No todo items data found.</EmptyDescription>
       </EmptyHeader>
 
       <EmptyContent>
-        <p>Add Todo and todo list will appear here.</p>
+        <p>
+          Add Todo and todo list will appear here, or retry searching again.
+        </p>
       </EmptyContent>
     </Empty>
   );

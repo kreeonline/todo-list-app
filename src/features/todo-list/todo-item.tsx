@@ -13,7 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { Todo } from '@/lib/todo';
+import type { Todo } from '@/features/todo-list/todo';
 import { cn } from '@/lib/utils';
 
 type TodoItemProps = ComponentProps<typeof Item> & {

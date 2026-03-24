@@ -1,51 +1,57 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   addTodo,
   addTodoFormSchema,
   defaultAddTodoFormValues,
   deleteTodo,
   getTodoList,
-  getTodoQueryKey,
-  todoQueryKey,
+  todoQueryKeys,
   updateTodo,
   type AddTodoFormSchema,
   type Todo,
-} from '@/lib/todo';
+} from '@/features/todo-list/todo';
 
 export const useTodoList = () => {
-  const queryClient = useQueryClient();
-
   const deleteTodoState = useState<Todo | null>(null);
   const [_deleteTodo, setDeleteTodo] = deleteTodoState;
 
   const todoQuery = useQuery<Todo[]>({
-    queryKey: getTodoQueryKey(),
+    queryKey: todoQueryKeys.all,
     queryFn: async () => getTodoList(),
+    meta: {
+      errorMessage: 'Unable to fetch todo list',
+    },
   });
 
   const addTodoMutation = useMutation({
-    mutationFn: async (todo: Omit<Todo, 'id'>) => addTodo(todo),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [todoQueryKey] });
-      form.reset();
+    mutationFn: addTodo,
+    onSuccess: () => form.reset(),
+    meta: {
+      successMessage: `Todo added successfully`,
+      errorMessage: `Unable to add todo`,
+      invalidates: [todoQueryKeys.all],
     },
   });
 
   const updateTodoMutation = useMutation({
     mutationFn: async (todo: Todo) => updateTodo(todo),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [todoQueryKey] });
+    meta: {
+      successMessage: `Todo updated successfully`,
+      errorMessage: `Unable to update todo`,
+      invalidates: [todoQueryKeys.all],
     },
   });
 
   const deleteTodoMutation = useMutation({
-    mutationFn: async (todoId: Todo['id']) => deleteTodo(todoId),
-    onSuccess: () => {
-      setDeleteTodo(null);
-      queryClient.invalidateQueries({ queryKey: [todoQueryKey] });
+    mutationFn: deleteTodo,
+    onSuccess: () => setDeleteTodo(null),
+    meta: {
+      successMessage: `Todo deleted successfully`,
+      errorMessage: `Unable to delete todo`,
+      invalidates: [todoQueryKeys.all],
     },
   });
 

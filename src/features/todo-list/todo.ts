@@ -22,10 +22,9 @@ export const defaultAddTodoFormValues: AddTodoFormSchema = {
   completed: false,
 };
 
-export const todoQueryKey = 'todos';
-
-export const getTodoQueryKey = () => {
-  return [todoQueryKey];
+export const todoQueryKeys = {
+  all: ['todos'] as const,
+  detail: (id: Todo['id']) => [...todoQueryKeys.all, id] as const,
 };
 
 export const getTodoList = async (

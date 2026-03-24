@@ -16,6 +16,9 @@ import {
 } from '@/features/todo-list/todo';
 
 export const useTodoList = () => {
+  const filterSearchState = useState<boolean>(false);
+  const [filterSearch] = filterSearchState;
+
   const deleteTodoState = useState<Todo | null>(null);
   const [_deleteTodo, setDeleteTodo] = deleteTodoState;
 
@@ -25,7 +28,10 @@ export const useTodoList = () => {
   });
 
   const searchTodos = useWatch({ control: form.control, name: 'title' });
-  const [debounceSearchTodos] = useDebounceValue(searchTodos, 300);
+  const [debounceSearchTodos] = useDebounceValue(
+    filterSearch ? searchTodos : '',
+    300
+  );
 
   const todoQuery = useQuery<Todo[]>({
     queryKey: todoQueryKeys.search(debounceSearchTodos),
@@ -70,6 +76,7 @@ export const useTodoList = () => {
 
   return {
     form,
+    filterSearchState,
     deleteTodoState,
     todoQuery,
     addTodoMutation,

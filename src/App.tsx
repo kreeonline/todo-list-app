@@ -2,6 +2,7 @@ import { ThemeToggle } from '@/features/theme/theme-toggler';
 import { AddTodoInput } from '@/features/todo-list/add-todo-input';
 import { DeleteTodoConfirmDialog } from '@/features/todo-list/delete-todo-confirm-dialog';
 import { TodoList } from '@/features/todo-list/todo-list';
+import { TodoListFilter } from '@/features/todo-list/todo-list-filter';
 import { TodoListContext } from '@/features/todo-list/todo-list.context';
 import { useTodoList } from '@/features/todo-list/todo-list.hook';
 
@@ -19,6 +20,7 @@ function App() {
       <main className="mx-auto w-full max-w-md">
         <TodoListContext value={todoList}>
           <AddTodoInput />
+          <TodoListFilter />
           <TodoList />
           <DeleteTodoConfirmDialog />
         </TodoListContext>

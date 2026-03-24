@@ -24,7 +24,9 @@ export const defaultAddTodoFormValues: AddTodoFormSchema = {
 
 export const todoQueryKeys = {
   all: ['todos'] as const,
-  search: (title: Todo['title']) => [...todoQueryKeys.all, title] as const,
+  search: (title: Todo['title']) => {
+    return title ? ([...todoQueryKeys.all, title] as const) : todoQueryKeys.all;
+  },
 };
 
 export const getTodoList = async (

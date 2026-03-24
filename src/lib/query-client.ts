@@ -23,6 +23,7 @@ declare module '@tanstack/react-query' {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 1000 * 10,
       refetchOnWindowFocus: false,
       retry: false,
     },

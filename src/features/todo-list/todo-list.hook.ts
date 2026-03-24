@@ -14,6 +14,7 @@ import {
   type AddTodoFormSchema,
   type Todo,
 } from '@/features/todo-list/todo';
+import { searchDebounceTime } from '@/lib/utils';
 
 export const useTodoList = () => {
   const filterSearchState = useState<boolean>(false);
@@ -29,8 +30,8 @@ export const useTodoList = () => {
 
   const searchTodos = useWatch({ control: form.control, name: 'title' });
   const [debounceSearchTodos] = useDebounceValue(
-    filterSearch ? searchTodos : '',
-    300
+    filterSearch ? searchTodos.trim() : '',
+    searchDebounceTime
   );
 
   const todoQuery = useQuery<Todo[]>({

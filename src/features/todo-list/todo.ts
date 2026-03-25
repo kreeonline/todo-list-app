@@ -1,5 +1,4 @@
 import z from 'zod';
-import { supabase } from '@/lib/supabase-client';
 
 export type Todo = {
   id: number;
@@ -33,42 +32,48 @@ export const todoQueryKeys = {
 export const getTodoList = async (
   params?: Partial<Pick<Todo, 'title' | 'completed'>>
 ): Promise<Todo[]> => {
-  const query = supabase
-    .from('todos')
-    .select()
-    .ilike('title', `%${params?.title}%`);
+  const url = new URL('http://localhost:3000/todos');
 
   if (params?.title) {
-    query.ilike('title', `%${params.title}%`);
+    url.searchParams.append('title_like', params.title);
   }
 
-  if (params?.completed) {
-    query.eq('completed', params.completed);
+  if (params?.completed !== undefined) {
+    url.searchParams.append('completed', params.completed.toString());
   }
 
-  const { data, error } = await query.order('created_at', { ascending: false });
-
-  if (error) throw error;
-  return data;
+  const response = await fetch(url.toString());
+  return await response.json();
 };
 
-export const addTodo = async (todo: Omit<Todo, 'id'>): Promise<void> => {
-  const { error } = await supabase.from('todos').insert(todo);
-
-  if (error) throw error;
-  return;
+export const addTodo = async (todo: Omit<Todo, 'id'>): Promise<Todo> => {
+  const response = await fetch('http://localhost:3000/todos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(todo),
+  });
+  return await response.json();
 };
 
-export const updateTodo = async (todo: Todo): Promise<void> => {
-  const { error } = await supabase.from('todos').update(todo).eq('id', todo.id);
-
-  if (error) throw error;
-  return;
+export const updateTodo = async (todo: Todo): Promise<Todo> => {
+  const response = await fetch(`http://localhost:3000/todos/${todo.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(todo),
+  });
+  return await response.json();
 };
 
 export const deleteTodo = async (todoId: Todo['id']): Promise<void> => {
-  const { error } = await supabase.from('todos').delete().eq('id', todoId);
-
-  if (error) throw error;
-  return;
+  const response = await fetch(`http://localhost:3000/todos/${todoId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return await response.json();
 };

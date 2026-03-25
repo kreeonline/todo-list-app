@@ -4,16 +4,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounceValue } from 'usehooks-ts';
 import {
-  addTodo,
   addTodoFormSchema,
   defaultAddTodoFormValues,
-  deleteTodo,
-  getTodoList,
   todoQueryKeys,
-  updateTodo,
   type AddTodoFormSchema,
   type Todo,
 } from '@/features/todo-list/todo';
+import {
+  addTodo,
+  deleteTodo,
+  getTodoList,
+  updateTodo,
+} from '@/features/todo-list/todo.data';
 import { searchDebounceTime } from '@/lib/utils';
 
 export const useTodoList = () => {

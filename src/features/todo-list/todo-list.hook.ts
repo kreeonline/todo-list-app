@@ -15,7 +15,7 @@ import {
   deleteTodo,
   getTodoList,
   updateTodo,
-} from '@/features/todo-list/todo-supabase.data';
+} from '@/features/todo-list/todo.data';
 import { searchDebounceTime } from '@/lib/utils';
 
 export const useTodoList = () => {

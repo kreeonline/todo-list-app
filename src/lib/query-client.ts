@@ -53,8 +53,8 @@ export const queryClient = new QueryClient({
         });
       }
     },
-    onError: (error, _variables, _context, query) => {
-      const { errorMessage } = query.meta ?? {};
+    onError: (error, _variables, _context, mutation) => {
+      const { errorMessage } = mutation.meta ?? {};
       toast.error(errorMessage ?? `Something went wrong! (${error.message})`);
     },
   }),
